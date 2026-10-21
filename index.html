@@ -1,0 +1,321 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Guida ai Gatti</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Layout: hero con occhi interattivi che seguono il cursore, poi sezioni a colonna singola larga con griglie di fatti, tabella, barra delle 24 ore ed elenco razze. */
+:root {
+  --bg: #ECEEF3;
+  --surface: #F8F9FB;
+  --ink: #182034;
+  --muted: #566178;
+  --line: #D2D7E1;
+  --accent: #E39A0B;
+  --accent-ink: #1B1405;
+  --c1: #2C3A63;
+  --c2: #6F7FB0;
+  --c3: #E39A0B;
+  --c4: #8FB59A;
+  --c5: #C9CFDD;
+  --eye-white: #FBFBF4;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1420;
+    --surface: #181F31;
+    --ink: #ECEFF6;
+    --muted: #9AA5BC;
+    --line: #29324A;
+    --accent: #F2B01E;
+    --accent-ink: #1B1405;
+    --c1: #5C6FB0;
+    --c2: #8D9AC8;
+    --c3: #F2B01E;
+    --c4: #7FAE8C;
+    --c5: #3A4560;
+    --eye-white: #E9EAD9;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1420;
+  --surface: #181F31;
+  --ink: #ECEFF6;
+  --muted: #9AA5BC;
+  --line: #29324A;
+  --accent: #F2B01E;
+  --accent-ink: #1B1405;
+  --c1: #5C6FB0;
+  --c2: #8D9AC8;
+  --c3: #F2B01E;
+  --c4: #7FAE8C;
+  --c5: #3A4560;
+  --eye-white: #E9EAD9;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 56px;
+}
+.wrap { max-width: 1040px; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.05; margin: 0; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 20px; font-size: 14px; color: var(--muted); }
+.topbar b { font-family: var(--font-display); font-size: 18px; color: var(--ink); letter-spacing: .01em; }
+.topbar span { letter-spacing: .08em; text-transform: uppercase; font-size: 12px; }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 32px 40px; align-items: center; padding-block: 24px 56px; }
+.kicker { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.hero h1 { font-size: clamp(64px, 12vw, 132px); font-weight: 800; letter-spacing: -.03em; margin-block: 8px 20px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.lead { font-size: 19px; max-width: 34ch; color: var(--muted); }
+.hint { margin-top: 20px; font-size: 14px; color: var(--muted); }
+
+.eyes { width: 100%; height: auto; display: block; touch-action: manipulation; cursor: pointer; }
+.eye-shell { transform-box: fill-box; transform-origin: center; transition: transform .14s ease-in; }
+.eye-shell.blink { transform: scaleY(.06); }
+.iris-move { transition: transform .12s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .eye-shell, .iris-move { transition: none; }
+}
+
+section { padding-block: 56px 8px; border-top: 1px solid var(--line); margin-top: 24px; }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 12px 40px; margin-bottom: 32px; align-items: end; }
+.sec-head h2 { font-size: clamp(32px, 5vw, 48px); font-weight: 700; letter-spacing: -.02em; }
+.sec-head p { color: var(--muted); max-width: 52ch; }
+
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.fact { background: var(--surface); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.fact .num { font-family: var(--font-display); font-weight: 800; font-size: 44px; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.fact .num small { font-size: 18px; font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 4px; }
+.fact p { color: var(--muted); font-size: 15.5px; }
+
+.table-scroll { overflow-x: auto; background: var(--surface); border-radius: 10px; }
+table { width: 100%; border-collapse: collapse; min-width: 480px; }
+th, td { text-align: left; padding: 16px 24px; vertical-align: top; }
+th { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--line); }
+td { border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; width: 36%; }
+td:last-child { color: var(--muted); }
+
+.day { background: var(--surface); border-radius: 10px; padding: 28px 24px 24px; }
+.bar { display: flex; height: 44px; border-radius: 6px; overflow: hidden; gap: 2px; }
+.bar i { display: block; min-width: 0; }
+.ticks { display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.legend { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px 24px; }
+.legend li { display: flex; align-items: center; gap: 10px; font-size: 15.5px; }
+.legend .sw { width: 14px; height: 14px; border-radius: 3px; flex: none; }
+.legend b { font-variant-numeric: tabular-nums; margin-left: auto; font-weight: 600; }
+.note { margin-top: 16px; font-size: 14px; color: var(--muted); }
+
+.breeds { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.breeds li { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr) auto; gap: 8px 32px; padding-block: 22px; border-bottom: 1px solid var(--line); align-items: baseline; }
+.breeds h3 { font-size: 28px; font-weight: 700; letter-spacing: -.015em; }
+.breeds .origin { display: block; font-family: var(--font-body); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-top: 4px; }
+.breeds p { color: var(--muted); }
+.breeds .kg { font-family: var(--font-display); font-weight: 700; font-size: 20px; white-space: nowrap; font-variant-numeric: tabular-nums; background: var(--accent); color: var(--accent-ink); padding: 4px 12px; border-radius: 999px; }
+
+.care { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px 40px; }
+.care h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; letter-spacing: -.01em; }
+.care p { color: var(--muted); font-size: 16px; }
+
+footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding-bottom: 32px; }
+  .sec-head { grid-template-columns: minmax(0, 1fr); }
+  .breeds li { grid-template-columns: minmax(0, 1fr) auto; }
+  .breeds p { grid-column: 1 / -1; grid-row: 2; }
+  th, td { padding: 14px 16px; }
+}
+</style>
+
+<div class="wrap">
+  <div class="topbar"><b>Gatti</b><span>Felis catus</span></div>
+
+  <header class="hero">
+    <div>
+      <div class="kicker">Piccola guida illustrata</div>
+      <h1>Gat<em>t</em>i</h1>
+      <p class="lead">Cacciatori silenziosi, dormiglioni professionisti e coinquilini con opinioni precise. Come sono fatti, cosa dicono con la coda e quali razze incontrerai più spesso.</p>
+      <p class="hint">Gli occhi ti seguono. Toccali e sbattono le palpebre.</p>
+    </div>
+    <svg class="eyes" id="eyes" viewBox="0 0 440 230" role="img" aria-label="Due occhi di gatto con pupille verticali che seguono il cursore">
+      <defs>
+        <radialGradient id="iris" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F4C531"/>
+          <stop offset="55%" stop-color="#D9A514"/>
+          <stop offset="100%" stop-color="#6E8A2E"/>
+        </radialGradient>
+        <clipPath id="almond"><path d="M -100 0 Q 0 -92 100 0 Q 0 92 -100 0 Z"/></clipPath>
+      </defs>
+      <g transform="translate(115 115)">
+        <g class="eye-shell">
+          <path d="M -100 0 Q 0 -92 100 0 Q 0 92 -100 0 Z" fill="var(--eye-white)"/>
+          <g clip-path="url(#almond)">
+            <g class="iris-move" data-eye>
+              <circle r="68" fill="url(#iris)"/>
+              <circle r="68" fill="none" stroke="#3E4D14" stroke-opacity=".5" stroke-width="3"/>
+              <ellipse class="pupil" rx="13" ry="58" fill="#0A0D14"/>
+              <circle cx="-22" cy="-26" r="8" fill="#fff" fill-opacity=".85"/>
+            </g>
+          </g>
+          <path d="M -100 0 Q 0 -92 100 0 Q 0 92 -100 0 Z" fill="none" stroke="var(--ink)" stroke-width="5" stroke-linejoin="round"/>
+        </g>
+      </g>
+      <g transform="translate(325 115)">
+        <g class="eye-shell">
+          <path d="M -100 0 Q 0 -92 100 0 Q 0 92 -100 0 Z" fill="var(--eye-white)"/>
+          <g clip-path="url(#almond)">
+            <g class="iris-move" data-eye>
+              <circle r="68" fill="url(#iris)"/>
+              <circle r="68" fill="none" stroke="#3E4D14" stroke-opacity=".5" stroke-width="3"/>
+              <ellipse class="pupil" rx="13" ry="58" fill="#0A0D14"/>
+              <circle cx="-22" cy="-26" r="8" fill="#fff" fill-opacity=".85"/>
+            </g>
+          </g>
+          <path d="M -100 0 Q 0 -92 100 0 Q 0 92 -100 0 Z" fill="none" stroke="var(--ink)" stroke-width="5" stroke-linejoin="round"/>
+        </g>
+      </g>
+    </svg>
+  </header>
+
+  <section id="corpo">
+    <div class="sec-head">
+      <h2>Un corpo fatto per cacciare</h2>
+      <p>Qualche numero spiega perché un gatto passa da fermo a un salto sul mobile più alto senza fare rumore.</p>
+    </div>
+    <div class="facts">
+      <div class="fact"><div class="num">230<small>ossa</small></div><p>Più dei 206 di un adulto umano, soprattutto per la coda e la colonna vertebrale flessibile.</p></div>
+      <div class="fact"><div class="num">32<small>muscoli</small></div><p>In ogni orecchio. Ognuna delle due può ruotare quasi indipendentemente per localizzare un suono.</p></div>
+      <div class="fact"><div class="num">25–150<small>Hz</small></div><p>La gamma di frequenze delle fusa, che il gatto produce sia quando è sereno sia quando si sta riprendendo da un malessere.</p></div>
+      <div class="fact"><div class="num">5<small>× la sua altezza</small></div><p>È il salto in verticale che riesce a fare partendo da fermo, grazie a zampe posteriori molto potenti.</p></div>
+      <div class="fact"><div class="num">12–16<small>ore di sonno</small></div><p>Ogni giorno per un adulto. I cuccioli e i gatti anziani dormono anche di più.</p></div>
+      <div class="fact"><div class="num">≈ 9.500<small>anni</small></div><p>È l'età della più antica sepoltura nota di un gatto accanto a una persona, trovata a Cipro.</p></div>
+    </div>
+  </section>
+
+  <section id="linguaggio">
+    <div class="sec-head">
+      <h2>Cosa dice con il corpo</h2>
+      <p>I gatti miagolano soprattutto agli umani. Tra loro comunicano con postura, coda e sguardo.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">Segnale</th><th scope="col">Di solito significa</th></tr></thead>
+        <tbody>
+          <tr><td>Coda dritta verso l'alto</td><td>Ti saluta ed è contento di vederti.</td></tr>
+          <tr><td>Ammiccamento lento</td><td>Si fida di te. Puoi rispondere chiudendo piano gli occhi.</td></tr>
+          <tr><td>Impasta con le zampe</td><td>Sta bene e si sente al sicuro, un gesto che ricorda l'allattamento.</td></tr>
+          <tr><td>Testata contro di te</td><td>Ti lascia il suo odore: per lui fai parte del gruppo.</td></tr>
+          <tr><td>Orecchie schiacciate indietro</td><td>È irritato o spaventato. Meglio lasciargli spazio.</td></tr>
+          <tr><td>Coda gonfia</td><td>Si è spaventato o è molto eccitato dal gioco.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="giornata">
+    <div class="sec-head">
+      <h2>Una giornata da gatto</h2>
+      <p>Le 24 ore di un gatto adulto di casa, divise per attività. Il sonno occupa più di metà del tempo.</p>
+    </div>
+    <div class="day">
+      <div class="bar" role="img" aria-label="Barra di 24 ore: 15 ore di sonno, 3 di riposo vigile, 3 di gioco e caccia, 2 di pulizia, 1 per mangiare">
+        <i style="flex: 15; background: var(--c1)"></i>
+        <i style="flex: 3; background: var(--c2)"></i>
+        <i style="flex: 3; background: var(--c3)"></i>
+        <i style="flex: 2; background: var(--c4)"></i>
+        <i style="flex: 1; background: var(--c5)"></i>
+      </div>
+      <div class="ticks" aria-hidden="true"><span>0 h</span><span>6 h</span><span>12 h</span><span>18 h</span><span>24 h</span></div>
+      <ul class="legend">
+        <li><span class="sw" style="background: var(--c1)"></span>Sonno profondo<b>15 h</b></li>
+        <li><span class="sw" style="background: var(--c2)"></span>Riposo vigile<b>3 h</b></li>
+        <li><span class="sw" style="background: var(--c3)"></span>Gioco e caccia<b>3 h</b></li>
+        <li><span class="sw" style="background: var(--c4)"></span>Pulizia del pelo<b>2 h</b></li>
+        <li><span class="sw" style="background: var(--c5)"></span>Pasti<b>1 h</b></li>
+      </ul>
+      <p class="note">Valori indicativi: cambiano con età, stagione e vita in casa o all'aperto.</p>
+    </div>
+  </section>
+
+  <section id="razze">
+    <div class="sec-head">
+      <h2>Cinque razze da conoscere</h2>
+      <p>Il peso è quello tipico di un adulto. Il carattere cambia da individuo a individuo, più della razza.</p>
+    </div>
+    <ul class="breeds">
+      <li><h3>Maine Coon<span class="origin">Stati Uniti</span></h3><p>Uno dei più grandi gatti domestici, con pelo lungo e voce sorprendentemente delicata. Socievole e paziente.</p><span class="kg">4–9 kg</span></li>
+      <li><h3>Siamese<span class="origin">Thailandia</span></h3><p>Slanciato, con maschera scura sul muso. Molto vocale e legatissimo alle persone con cui vive.</p><span class="kg">3–5 kg</span></li>
+      <li><h3>Persiano<span class="origin">Iran</span></h3><p>Muso schiacciato e mantello lunghissimo. Tranquillo e casalingo, ma il pelo va spazzolato ogni giorno.</p><span class="kg">3,5–7 kg</span></li>
+      <li><h3>Certosino<span class="origin">Francia</span></h3><p>Pelo corto grigio-blu e occhi arancio. Robusto, silenzioso e affettuoso con chi conosce.</p><span class="kg">4–7 kg</span></li>
+      <li><h3>Europeo<span class="origin">Italia ed Europa</span></h3><p>Il gatto di casa per eccellenza, in tutti i colori. Sano, adattabile e senza pedigree.</p><span class="kg">3–5 kg</span></li>
+    </ul>
+  </section>
+
+  <section id="cura">
+    <div class="sec-head">
+      <h2>Le basi per farlo stare bene</h2>
+      <p>Quattro abitudini che fanno la differenza nella vita quotidiana.</p>
+    </div>
+    <div class="care">
+      <div><h3>Acqua lontana dal cibo</h3><p>In natura l'acqua vicino alla preda è sospetta. Una ciotola in un'altra stanza lo invoglia a bere di più.</p></div>
+      <div><h3>Una lettiera in più</h3><p>La regola è una per gatto più una di scorta, in punti tranquilli e puliti ogni giorno.</p></div>
+      <div><h3>Gioco ogni giorno</h3><p>Dieci o quindici minuti con una canna da pesca o una pallina mantengono agilità e buonumore.</p></div>
+      <div><h3>Visita dal veterinario</h3><p>Un controllo l'anno aiuta a tenere sotto controllo vaccini, denti, peso e sterilizzazione.</p></div>
+    </div>
+  </section>
+
+  <footer>Pagina informativa. Le cifre sono medie e indicano ordini di grandezza.</footer>
+</div>
+
+<script>
+(function () {
+  var svg = document.getElementById('eyes');
+  var irises = Array.prototype.slice.call(document.querySelectorAll('[data-eye]'));
+  var shells = Array.prototype.slice.call(document.querySelectorAll('.eye-shell'));
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function look(x, y) {
+    irises.forEach(function (g) {
+      var r = g.parentNode.parentNode.getBoundingClientRect();
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      var dx = x - cx, dy = y - cy;
+      var d = Math.sqrt(dx * dx + dy * dy) || 1;
+      var k = Math.min(d / 220, 1);
+      var tx = (dx / d) * 30 * k, ty = (dy / d) * 14 * k;
+      g.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px)';
+    });
+  }
+  window.addEventListener('pointermove', function (e) { look(e.clientX, e.clientY); });
+
+  function blink() {
+    shells.forEach(function (s) { s.classList.add('blink'); });
+    setTimeout(function () { shells.forEach(function (s) { s.classList.remove('blink'); }); }, 160);
+  }
+  svg.addEventListener('click', blink);
+
+  if (!reduce) {
+    (function loop() {
+      setTimeout(function () { blink(); loop(); }, 3500 + Math.random() * 3500);
+    })();
+  }
+})();
+</script>
+
+</body></html>
