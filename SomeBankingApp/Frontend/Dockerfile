@@ -4,8 +4,7 @@ RUN apk add --no-cache git \
     && git clone https://github.com/mmenapace/SomeBankingApp.git . \
     && rm -rf backend .git \
     && cd frontend && npm install \
-    && apk del git
-    
+
 EXPOSE 4200
 
 ENTRYPOINT ["npm", "start", "--", "--host", "0.0.0.0"]
