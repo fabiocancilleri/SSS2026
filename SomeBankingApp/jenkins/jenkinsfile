@@ -10,12 +10,12 @@ pipeline {
         }
         stage('Build Backend') {
             steps {
-                sh 'docker build -t my-backend:latest ./Backend'
+                sh 'docker build -t my-backend:latest ./SomeBankingApp/Backend'
             }
         }
         stage('Build Frontend') {
             steps {
-                sh 'docker build -t my-frontend:latest ./Frontend'
+                sh 'docker build -t my-frontend:latest ./SomeBankingApp/Frontend'
             }
         }
        
