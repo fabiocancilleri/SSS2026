@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build proxy') {
+            steps {
+                sh 'docker build -t my-proxy:latest ./ReverseProxy'
+            }
+        }
+        stage('Build Backend') {
+            steps {
+                sh 'docker build -t my-backend:latest ./Backend'
+            }
+        }
+        stage('Build Frontend') {
+            steps {
+                sh 'docker build -t my-frontend:latest ./Frontend'
+            }
+        }
+        stage('Run Docker Compose') {
+            steps {
+                sh 'docker-compose up -d'
+            }
+        }
+    }
+}
