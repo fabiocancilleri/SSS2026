@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('Build proxy') {
+
+        stage('Checkout') {
             steps {
-                sh 'docker build -t my-proxy:latest ./ReverseProxy'
+                git branch: 'main', url: 'https://github.com/fabiocancilleri/SSS2026.git'
             }
         }
         stage('Build Backend') {
@@ -17,10 +18,6 @@ pipeline {
                 sh 'docker build -t my-frontend:latest ./Frontend'
             }
         }
-        stage('Run Docker Compose') {
-            steps {
-                sh 'docker-compose up -d'
-            }
-        }
+       
     }
 }
