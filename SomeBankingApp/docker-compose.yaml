@@ -1,0 +1,17 @@
+services:
+  backend:
+    image: backend
+    expose:
+      - "8000"
+
+  frontend:
+    image: frontend
+    expose:
+      - "4200"
+  reverse-proxy:
+    image: proxy
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
